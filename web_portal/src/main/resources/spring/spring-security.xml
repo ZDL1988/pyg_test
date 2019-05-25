@@ -15,7 +15,8 @@
 <!-- 	<http pattern="/cart.html" security="none"></http> -->
     	
 	<!--   entry-point-ref  入口点引用 -->
-	<http use-expressions="false" entry-point-ref="casProcessingFilterEntryPoint"> 
+	<http use-expressions="false" entry-point-ref="casProcessingFilterEntryPoint">
+        <!-- 这个拦截不能完全放行, 也不能完全不放行, 完全放行则获取用户名时会报空指针异常, 完全不放行则游客不能添加购物车-->
 		<!-- 匿名角色 IS_AUTHENTICATED_ANONYMOUSLY -->
 		<intercept-url pattern="/cart/*.do" access="IS_AUTHENTICATED_ANONYMOUSLY"></intercept-url> 
 		<intercept-url pattern="/itemsearch/*.do" access="IS_AUTHENTICATED_ANONYMOUSLY"></intercept-url>

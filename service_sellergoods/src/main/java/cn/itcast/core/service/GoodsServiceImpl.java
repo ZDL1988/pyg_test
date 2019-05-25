@@ -39,7 +39,7 @@ import java.util.Map;
 
 @Service
 @Transactional
-public class GoodsServiceImpl implements  GoodsService {
+public class GoodsServiceImpl implements GoodsService {
 
     @Autowired
     private GoodsDao goodsDao;
@@ -80,7 +80,7 @@ public class GoodsServiceImpl implements  GoodsService {
         if (goods != null) {
             //根据商品名称模糊查询
             if (goods.getGoodsName() != null && !"".equals(goods.getGoodsName())) {
-                criteria.andGoodsNameLike("%"+goods.getGoodsName()+"%");
+                criteria.andGoodsNameLike("%" + goods.getGoodsName() + "%");
             }
             //根据状态精确查询
             if (goods.getAuditStatus() != null && !"".equals(goods.getAuditStatus())) {
@@ -95,7 +95,7 @@ public class GoodsServiceImpl implements  GoodsService {
             criteria.andIsDeleteIsNull();
         }
 
-        Page<Goods> goodsList = (Page<Goods>)goodsDao.selectByExample(query);
+        Page<Goods> goodsList = (Page<Goods>) goodsDao.selectByExample(query);
         return new PageResult(goodsList.getTotal(), goodsList.getResult());
     }
 
@@ -227,8 +227,9 @@ public class GoodsServiceImpl implements  GoodsService {
 
     /**
      * 设置库存对象的属性
-     * @param item          需要设置的库存对象
-     * @param goodsEntity   页面传入的商品实体对象
+     *
+     * @param item        需要设置的库存对象
+     * @param goodsEntity 页面传入的商品实体对象
      * @return
      */
     private Item setItemValues(Item item, GoodsEntity goodsEntity) {
@@ -264,7 +265,8 @@ public class GoodsServiceImpl implements  GoodsService {
 
     /**
      * 添加库存集合到数据库
-     * @param goodsEntity   页面传入的实体对象
+     *
+     * @param goodsEntity 页面传入的实体对象
      */
     private void insertItemList(GoodsEntity goodsEntity) {
         //判断是否启用规格, 也就是是否有库存
@@ -293,7 +295,7 @@ public class GoodsServiceImpl implements  GoodsService {
                     itemDao.insertSelective(item);
                 }
             }
-        } else{
+        } else {
             //未启用规格
             //创建初始化规格对象
             Item item = new Item();

@@ -1,13 +1,16 @@
 package cn.itcast.core.controller;
 
+import cn.itcast.core.pojo.entity.PageResult;
 import cn.itcast.core.pojo.entity.Result;
 import cn.itcast.core.pojo.log.PayLog;
 import cn.itcast.core.service.OrderService;
 import cn.itcast.core.service.PayService;
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.github.pagehelper.Page;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Map;
 
@@ -25,7 +28,22 @@ public class PayController {
     private PayService payService;
 
     /**
+     * 未支付页面
+     *
+     * @return
+     */
+    @RequestMapping("/findOrderListByPage")
+    public PageResult findOrderListByPage(Integer page, Integer rows) {
+        //1. 获取当前登录用户的用户名
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+        PageResult pageResult = payService.findOrderListByPage(userName, 1,  10);
+        return pageResult;
+    }
+
+
+    /**
      * 生成支付链接
+     *
      * @return
      */
     @RequestMapping("/createNative")
@@ -42,7 +60,8 @@ public class PayController {
 
     /**
      * 根据支付单号查询支付状态
-     * @param out_trade_no  支付单号
+     *
+     * @param out_trade_no 支付单号
      * @return
      */
     @RequestMapping("/queryPayStatus")
@@ -50,21 +69,21 @@ public class PayController {
         Result result = null;
         int flag = 1;
         //1. 死循环
-        while(true) {
+        while (true) {
             //2. 根据支付单号, 调用微信的查询订单接口查询支付状态
             Map resultMap = payService.queryPayStatus(out_trade_no);
             //3. 如果返回空的对象表示支付超时
             if (resultMap == null) {
                 result = new Result(false, "二维码超时");
                 break;
-            }
-            //4. 如果返回数据中trade_state属性为SUCCESS代表支付成功
-           if ("SUCCESS".equals(resultMap.get("trade_state"))) {
-                //更新支付状态到数据库, 并且清除缓存中的未支付日志
-                orderService.updateOrderStatus(out_trade_no, String.valueOf(resultMap.get("transaction_id")));
-                result = new Result(true, "支付成功!");
-                break;
-           }
+        }
+        //4. 如果返回数据中trade_state属性为SUCCESS代表支付成功
+        if ("SUCCESS".equals(resultMap.get("trade_state"))) {
+            //更新支付状态到数据库, 并且清除缓存中的未支付日志
+            orderService.updateOrderStatus(out_trade_no, String.valueOf(resultMap.get("transaction_id")));
+            result = new Result(true, "支付成功!");
+            break;
+        }
             //超过20分钟未支付, 则支付超时
             if (flag >= 400) {
                 result = new Result(false, "二维码超时");
