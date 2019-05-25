@@ -136,7 +136,7 @@ public class PayServiceImpl implements PayService {
 
         PageHelper.startPage(page, rows);
 
-        List<Order> orders = new ArrayList<>();
+        Page<Order> pageOrder = new Page<>();
         //1.根据用户名取redis中查询订单状态为未支付的
         PayLog payLog = (PayLog) redisTemplate.boundHashOps(Constants.REDIS_PAYLOG).get(userName);
         if (null != payLog) {
@@ -153,20 +153,20 @@ public class PayServiceImpl implements PayService {
                     example.createCriteria().andOrderIdEqualTo(Long.parseLong(split[i]));
                     List<OrderItem> orderItemList = orderItemDao.selectByExample(example);
                     order.setOrderItemList(orderItemList);
-                    orders.add(order);
+                    pageOrder.getResult().add(order);
 
                 }
+                pageOrder.setTotal(split.length);
             }
+
         }
 
         try {
             //3.分页返回
-            Page<Order> pageOrder = (Page<Order>) orders;
-
             return new PageResult(pageOrder.getTotal(), pageOrder.getResult());
         } catch (Exception e) {
             e.printStackTrace();
-            return null ;
+            return null;
         }
     }
 }

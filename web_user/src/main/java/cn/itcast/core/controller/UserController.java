@@ -1,10 +1,13 @@
 package cn.itcast.core.controller;
 
+import cn.itcast.core.pojo.entity.PageResult;
 import cn.itcast.core.pojo.entity.Result;
 import cn.itcast.core.pojo.user.User;
+import cn.itcast.core.service.PayService;
 import cn.itcast.core.service.UserService;
 import cn.itcast.core.util.PhoneFormatCheckUtils;
 import com.alibaba.dubbo.config.annotation.Reference;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +23,22 @@ public class UserController {
 
     @Reference
     private UserService userService;
+
+    @Reference
+    private PayService payService;
+
+    /**
+     * 未支付页面
+     *
+     * @return
+     */
+    @RequestMapping("/findOrderListByPage")
+    public PageResult findOrderListByPage(Integer page, Integer rows) {
+        //1. 获取当前登录用户的用户名
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+        PageResult pageResult = payService.findOrderListByPage(userName, 1,  10);
+        return pageResult;
+    }
 
     /**
      * 向指定手机号发送短信验证码

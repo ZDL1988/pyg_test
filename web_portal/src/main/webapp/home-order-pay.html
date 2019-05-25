@@ -224,33 +224,33 @@ $(function(){
                                     </div>
                                 </div>
 
-                                <div class="choose-title">
+                                <div class="choose-title" ng-repeat="orderPay in orderPayList">
                                     <label data-toggle="checkbox" class="checkbox-pretty ">
-                                           <input type="checkbox" checked="checked"><span>2017-02-11 11:59　订单编号：7867473872181848  店铺：哇哈哈 <a>和我联系</a></span>
+                                           <input type="checkbox" checked="checked"><span>{{orderPay.createTime}} 　订单编号：{{orderPay.orderId}}   店铺：{{orderPay.sellerId}} <a>和我联系</a></span>
                                      </label>
                                     <a class="sui-btn btn-info share-btn">分享</a>
-                                </div>
+
                                 <table class="sui-table table-bordered order-datatable">
 
-                                    <tbody>
-                                        <tr>
+                                    <tbody ng-repeat="item in orderPay.orderItemList">
+                                        <tr >
                                             <td width="35%">
-                                                <div class="typographic"><img src="img/goods.png" />
-                                                    <a href="#" class="block-text">包邮 正品玛姬儿压缩面膜无纺布纸膜100粒 送泡瓶面膜刷喷瓶 新款</a>
-                                                    <span class="guige">规格：温泉喷雾150ml</span>
+                                                <div class="typographic"><img src="{{item.picPath}}" />
+                                                    <a href="https://item.jd.com/200868.html" class="block-text">{{item.title}}</a>
+                                                    <span class="guige"></span>
                                                 </div>
                                             </td>
                                             <td width="5%" class="center">
                                                 <ul class="unstyled">
-                                                    <li class="o-price">¥599.00</li>
-                                                    <li>¥299.00</li>
+                                                    <li class="o-price">¥{{item.price}}</li>
+                                                    <li>¥{{item.price}}</li>
                                                 </ul>
                                             </td>
-                                            <td width="5%" class="center">1</td>
+                                            <td width="5%" class="center">{{item.num}}</td>
                                             <td width="8%" class="center"></td>
                                             <td width="10%" class="center">
                                                 <ul class="unstyled">
-                                                    <li>¥299.00</li>
+                                                    <li>¥{{item.totalFee}}</li>
                                                     <li>（含运费：￥0.00）</li>
                                                 </ul>
                                             </td>
@@ -264,15 +264,15 @@ $(function(){
                                             </td>
                                             <td width="10%" class="center">
                                                 <ul class="unstyled">
-                                                    <li><a href="#" class="sui-btn btn-info">立即付款</a></li>
+                                                    <li><a  href="pay.html" class="sui-btn btn-info">立即付款</a></li>
                                                     <li><a href="#">取消订单</a></li>
                                                 </ul>
                                             </td>
+										</tr>
+									</tbody>
                                         </tr>
-                                        </tr>
-                                    </tbody>
                                 </table>
-
+								</div>
                             </div>
 
                             <div class="choose-order">
@@ -284,12 +284,11 @@ $(function(){
                                     <ul>
                                         <li class="prev disabled"><a href="#">«上一页</a></li>
                                         <li class="active"><a href="#">1</a></li>
-                                        <li><a href="#">2</a></li>
-                                        <li><a href="#">3</a></li>
+
                                         <li class="dotted"><span>...</span></li>
                                         <li class="next"><a href="#">下一页»</a></li>
                                     </ul>
-                                    <div><span>共10页&nbsp;</span><span>
+                                    <div><span>共{{totalValue}}页&nbsp;</span><span>
                                             到
                                             <input type="text" class="page-num"><button class="page-confirm" onclick="alert(1)">确定</button>
                                             页</span></div>
