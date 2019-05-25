@@ -29,18 +29,22 @@ function scrollFloorView(){
 	if(1200 < ling && ling < 1700) { //第一层的数字隐藏，文字显示，其他兄弟元素的li数字显示，文字隐藏
 		$("#floor-index ul li").eq(0).find(".num").hide().siblings(".word").css("display", "block");
 		$("#floor-index ul li").eq(0).siblings("li").find(".num").css("display", "block").siblings(".word").hide();
+        //第二层
 	} else if(ling < 2200) {
 		$("#floor-index ul li").eq(1).find(".num").hide().siblings(".word").css("display", "block");
 		$("#floor-index ul li").eq(1).siblings("li").find(".num").css("display", "block").siblings(".word").hide();
 	}
+    //第三层
     else if(ling < 2400) {
         $("#floor-index ul li").eq(2).find(".num").hide().siblings(".word").css("display", "block");
         $("#floor-index ul li").eq(2).siblings("li").find(".num").css("display", "block").siblings(".word").hide();
     }
+    //第四层
     else if(ling < 3000) {
         $("#floor-index ul li").eq(3).find(".num").hide().siblings(".word").css("display", "block");
         $("#floor-index ul li").eq(3).siblings("li").find(".num").css("display", "block").siblings(".word").hide();
     }
+    //第五层
     else if(ling < 3400) {
         $("#floor-index ul li").eq(4).find(".num").hide().siblings(".word").css("display", "block");
         $("#floor-index ul li").eq(4).siblings("li").find(".num").css("display", "block").siblings(".word").hide();
