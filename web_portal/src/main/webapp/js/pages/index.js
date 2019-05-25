@@ -23,17 +23,35 @@ $(function() {
 /*楼层导航*/
 function scrollFloorView(){
 	var ling = $(document).scrollTop(); //获得窗口滚动上去的距离	
-	if(ling > 1200) {
+	if(ling > 1400) {
 		$("#floor-index").show(); //如果滚动的距离大于1200，滚动框显示出来
 	}
-	if(1200 < ling && ling < 1600) { //第一层的数字隐藏，文字显示，其他兄弟元素的li数字显示，文字隐藏
+	if(1200 < ling && ling < 1700) { //第一层的数字隐藏，文字显示，其他兄弟元素的li数字显示，文字隐藏
 		$("#floor-index ul li").eq(0).find(".num").hide().siblings(".word").css("display", "block");
 		$("#floor-index ul li").eq(0).siblings("li").find(".num").css("display", "block").siblings(".word").hide();
-	} else if(ling < 1800) {
+        //第二层
+	} else if(ling < 2200) {
 		$("#floor-index ul li").eq(1).find(".num").hide().siblings(".word").css("display", "block");
 		$("#floor-index ul li").eq(1).siblings("li").find(".num").css("display", "block").siblings(".word").hide();
 	}
-	if(ling > 2500 || ling < 1200) {
+    //第三层
+    else if(ling < 2400) {
+        $("#floor-index ul li").eq(2).find(".num").hide().siblings(".word").css("display", "block");
+        $("#floor-index ul li").eq(2).siblings("li").find(".num").css("display", "block").siblings(".word").hide();
+    }
+    //第四层
+    else if(ling < 3000) {
+        $("#floor-index ul li").eq(3).find(".num").hide().siblings(".word").css("display", "block");
+        $("#floor-index ul li").eq(3).siblings("li").find(".num").css("display", "block").siblings(".word").hide();
+    }
+    //第五层
+    else if(ling < 3400) {
+        $("#floor-index ul li").eq(4).find(".num").hide().siblings(".word").css("display", "block");
+        $("#floor-index ul li").eq(4).siblings("li").find(".num").css("display", "block").siblings(".word").hide();
+    }
+
+
+	if(ling > 3400|| ling < 1200) {
 		$("#floor-index").hide();
 	}
 }
