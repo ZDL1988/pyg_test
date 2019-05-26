@@ -1,5 +1,6 @@
 package cn.itcast.core.service;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -15,6 +16,10 @@ import java.util.List;
  * 在这里获取这个用户具有哪些访问权限集合, 封装成SpringSecurity需要的User对象, 返回给SpringSecurity.
  */
 public class UserDetailServiceImpl implements UserDetailsService {
+
+    @Reference
+    private UserService userService;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         //创建权限集合

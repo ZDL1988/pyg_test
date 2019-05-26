@@ -28,7 +28,7 @@
 
 </head>
 
-<body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="seckillOrderController" ng-init="findAll()">
+<body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="seckillOrderController" ng-init="search()">
   <!-- .box-body -->
                 
                     <div class="box-header with-border">
@@ -51,8 +51,8 @@
                             </div>
                             <div class="box-tools pull-right">
                                 <div class="has-feedback">
-                                    商品名称：<input >
-									<button class="btn btn-default" >查询</button>                                    
+                                    商品名称：<input ng-model="searchEntity.sellerId">
+                                    <input class="btn btn-default" ng-click="reloadList()" type="button" value="查询">
                                 </div>
                             </div>
                             <!--工具栏/-->
@@ -76,7 +76,7 @@
 			                      <tbody>
 			                          <tr ng-repeat="entity in list">
 			                              <td><input ng-click="updateSelection($event,entity.id)" type="checkbox"></td>			                              
-				                          <td>{{entity.id}}</td>
+				                          <td>{{entity.receiverAddress}}</td>
 									      <td>{{entity.money}}</td>
 									      <td>{{entity.userId}}</td>
 									      <td>{{entity.sellerId}}</td>
