@@ -52,7 +52,7 @@
                             <div class="pull-left">
                                 <div class="form-group form-inline">
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-default" title="新建"  data-toggle="modal" data-target="#editModal" ng-click="entity={customAttributeItems:[]}"><i class="fa fa-file-o"></i> 新建</button>
+                                        <button type="button" class="btn btn-default" ng-click="entity={customAttributeItems:[]}" title="新建"  data-toggle="modal" data-target="#editModal" ><i class="fa fa-file-o"></i> 新建</button>
                                         <button type="button" class="btn btn-default" ng-click="dele()" title="删除"><i class="fa fa-trash-o"></i> 删除</button>
                                        
                                         <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i class="fa fa-refresh"></i> 刷新</button>
@@ -61,8 +61,8 @@
                             </div>
                             <div class="box-tools pull-right">
                                 <div class="has-feedback">
-							                  分类模板名称：<input  >									
-									<button class="btn btn-default">查询</button>                                    
+							                  分类模板名称：<input ng-model="searchEntity.name" >
+									<button class="btn btn-default" ng-click="reloadList()">查询</button>
                                 </div>
                             </div>
                             <!--工具栏/-->
@@ -88,7 +88,7 @@
 				                          <td>{{entity.id}}</td>
 									      <td>{{entity.name}}</td>
 									      <td>{{jsonToString(entity.brandIds,'text')}}</td>
-									      <td>{{jsonToString(entity.specIds,'text')}}</td>
+									      <td>{{jsonToString(entity.specIds,'text')}}</td>									 
 									      <td>{{jsonToString(entity.customAttributeItems,'text')}}</td>		                                                                  
 		                                  <td class="text-center">                                           
 		                                 	  <button type="button" class="btn bg-olive btn-xs" ng-click="findOne(entity.id)" data-toggle="modal" data-target="#editModal" >修改</button>                                           
@@ -132,10 +132,8 @@
 		      		<td>
 		      			<!-- 
 		      				ng-model:绑定下拉列表的id
-		      				select2-model:绑定下拉列表的id和value到angularjs的$scope域中
-		      				config:代表的是数据的来源, 也就是下拉框需要的下拉数据集合
-		      				multiple: 加上这个属性, 下拉框可以多选, 不加这个属性下拉框只能单选
-		      				placeholder: 下拉框在没有选择任何数据前的提示信息
+		      				select2-model:绑定下拉列表的id和value
+		      				config:代表的是数据的来源
 		      			 -->
 		      			<input select2 select2-model="entity.brandIds" config="brandList" multiple placeholder="支持多选哦" class="form-control" type="text"/>
 		      		</td>

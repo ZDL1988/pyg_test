@@ -27,7 +27,7 @@
     
 </head>
 
-<body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="specificationController">
+<body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="specificationController" >
   <!-- .box-body -->                
                     <div class="box-header with-border">
                         <h3 class="box-title">规格管理</h3>
@@ -49,8 +49,8 @@
                             </div>
                             <div class="box-tools pull-right">
                                 <div class="has-feedback">
-							                    规格名称：<input  >									
-									<button class="btn btn-default" >查询</button>                                    
+							                    规格名称：<input ng-model="searchEntity.specName" >
+									<button class="btn btn-default" ng-click="reloadList()" >查询</button>
                                 </div>
                             </div>
                             <!--工具栏/-->

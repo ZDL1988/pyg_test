@@ -2,7 +2,9 @@ package cn.itcast.core.dao.user;
 
 import cn.itcast.core.pojo.user.User;
 import cn.itcast.core.pojo.user.UserQuery;
+
 import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface UserDao {
@@ -27,4 +29,11 @@ public interface UserDao {
     int updateByPrimaryKeySelective(User record);
 
     int updateByPrimaryKey(User record);
+
+    User selectUserByUserName(String username);
+
+    List<User> selectActiveUser();
+
+    List<User> selectUnActiveUser();
+
 }

@@ -67,7 +67,7 @@ public class UserQuery {
     }
 
     public void setFields(String fields) {
-        this.fields=fields;
+        this.fields = fields;
     }
 
     public String getFields() {
@@ -202,6 +202,16 @@ public class UserQuery {
 
         public Criteria andUsernameGreaterThanOrEqualTo(String value) {
             addCriterion("username >=", value, "username");
+            return (Criteria) this;
+        }
+
+        public Criteria andCountsGreaterThanOrEqualTo(Integer value) {
+            addCriterion("counts >=", value, "counts");
+            return (Criteria) this;
+        }
+
+        public Criteria andCountsLessThan(Integer value) {
+            addCriterion("counts <=", value, "counts");
             return (Criteria) this;
         }
 

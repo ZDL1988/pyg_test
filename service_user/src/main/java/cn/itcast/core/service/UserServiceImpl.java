@@ -1,9 +1,12 @@
 package cn.itcast.core.service;
 
 import cn.itcast.core.dao.user.UserDao;
+import cn.itcast.core.pojo.entity.PageResult;
 import cn.itcast.core.pojo.user.User;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +21,7 @@ import javax.jms.Message;
 import javax.jms.Session;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -50,7 +54,7 @@ public class UserServiceImpl implements UserService {
     public void sendCode(final String phone) {
 
         //1. 生成一个随机六位以内的数字作为短信验证码
-        final long code = (long)(Math.random() * 1000000);
+        final long code = (long) (Math.random() * 1000000);
         //2. 将手机号作为key, 验证码作为value保存到redis, 生存时间为10分钟
         redisTemplate.boundValueOps(phone).set(code, 10, TimeUnit.MINUTES);
         //3. 将手机号, 验证码, 模板编号, 签名等内容封装成Map类型的消息, 发送给消息服务器
@@ -77,17 +81,16 @@ public class UserServiceImpl implements UserService {
         });
 
 
-
     }
 
     @Override
     public boolean checkCode(String phone, String smsCode) {
         //1. 校验手机号和验证码不为空
-        if (phone == null || "".equals(phone) || smsCode ==null || "".equals(smsCode)) {
+        if (phone == null || "".equals(phone) || smsCode == null || "".equals(smsCode)) {
             return false;
         }
         //2. 根据手机号到redis中获取验证码
-        Long redisSmsCode = (Long)redisTemplate.boundValueOps(phone).get();
+        Long redisSmsCode = (Long) redisTemplate.boundValueOps(phone).get();
         //3. 判断如果获取不到验证码直接返回false校验失败
         if (redisSmsCode == null || "".equals(redisSmsCode)) {
             return false;
@@ -110,8 +113,74 @@ public class UserServiceImpl implements UserService {
         userDao.insertSelective(user);
     }
 
+
+    @Override
+    public void add(User user, String smscode) {
+        //判断验证码是否正确
+        //从缓存中获取验证码
+        String code = (String) redisTemplate.boundValueOps(user.getPhone()).get();
+        //首先判断是否为空 因为如果时间到了 验证码被清空就会失效
+        if (null != code) {
+            //在进行判断验证码是否相等
+            if (code.equals(smscode)) {
+                //如果验证码相同 就添加到数据库
+                //将数据表中的非空字段给赋值
+                user.setCreated(new Date());
+                user.setUpdated(new Date());
+                user.setStatus("0");
+                userDao.insertSelective(user);
+            } else {
+                throw new RuntimeException("验证码错误");
+            }
+        } else {
+            throw new RuntimeException("验证码已失效");
+        }
+    }
+
     public static void main(String[] args) {
-        long random = (long)(Math.random() * 1000000);
+        long random = (long) (Math.random() * 1000000);
         System.out.println("=======" + random);
     }
+
+
+    @Override
+    public List<User> findAll() {
+        return userDao.selectByExample(null);
+    }
+
+    @Override
+    public PageResult search(Integer page, Integer rows, User user) {
+        PageHelper.startPage(page, rows);
+        Page<User> page1 = (Page<User>) userDao.selectByExample(null);
+        return new PageResult(page1.getTotal(), page1.getResult());
+    }
+
+    @Override
+    public void freeze(Long[] ids) {
+        for (Long id : ids) {
+            //修改状态 冻结
+            User user = userDao.selectByPrimaryKey(id);
+            user.setStatus("N");
+            userDao.updateByPrimaryKeySelective(user);
+        }
+    }
+
+    @Override
+    public void unfreeze(Long[] ids) {
+        for (Long id : ids) {
+            //修改状态 解冻
+            User user = userDao.selectByPrimaryKey(id);
+            user.setStatus("Y");
+            userDao.updateByPrimaryKeySelective(user);
+        }
+    }
+
+    @Override
+    public void update(String username) {
+        User user = userDao.selectUserByUserName(username);
+        user.setLastLoginTime(new Date());
+        user.setCounts(user.getCounts() + 1);
+        userDao.updateByPrimaryKeySelective(user);
+    }
+
 }

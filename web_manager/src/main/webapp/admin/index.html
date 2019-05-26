@@ -271,7 +271,7 @@
 
                                     <p>
                                       {{loginName}}
-                                        <small>最后登录 11:20AM</small>
+                                        <small>最后登录 {{time}}</small>
                                     </p>
                                 </li>
                                 
@@ -374,6 +374,8 @@
 				                    <i class="fa fa-circle-o"></i>商品审核
 				                </a>
 				            </li>
+
+
 				        </ul>                        
 				    </li>
 					
@@ -399,6 +401,40 @@
 				            </li>
 				        </ul>                        
 				    </li>
+                    <!--用户管理-->
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-folder"></i>
+                            <span>用户管理</span>
+                            <span class="pull-right-container">
+				       			<i class="fa fa-angle-left pull-right"></i>
+				   		 	</span>
+                        </a>
+                        <ul class="treeview-menu">
+
+                            <li id="admin-login">
+                                <a href="user.html" target="iframe">
+                                    <i class="fa fa-circle-o"></i>用户统计
+                                </a>
+                            </li>
+                            <li id="admin-login">
+                                <a href="activeUser.html" target="iframe">
+                                    <i class="fa fa-circle-o"></i>活跃用户
+                                </a>
+                            </li>
+                            <li id="admin-login">
+                                <a href="UnActiveUser.html" target="iframe">
+                                    <i class="fa fa-circle-o"></i>非活跃用户
+                                </a>
+                            </li>
+                            <li id="admin-login">
+                                <a href="userDetail.html" target="iframe">
+                                    <i class="fa fa-circle-o"></i>用户详情
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
 				    <!-- 菜单 /-->
 
                 </ul>
