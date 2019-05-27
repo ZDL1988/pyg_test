@@ -389,4 +389,7 @@
       is_delete = #{isDelete,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <select id="selectTypeTemplateIds" resultType="String">
+    SELECT g.type_template_id FROM tb_order_item oi LEFT JOIN tb_goods g ON oi.goods_id = g.id
+  </select>
 </mapper>
