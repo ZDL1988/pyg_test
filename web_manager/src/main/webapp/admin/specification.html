@@ -27,7 +27,7 @@
     
 </head>
 
-<body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="specificationController" >
+<body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="specificationController">
   <!-- .box-body -->                
                     <div class="box-header with-border">
                         <h3 class="box-title">规格管理</h3>
@@ -42,16 +42,30 @@
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-default" title="新建" ng-click="entity={specificationOptionList:[]}" data-toggle="modal" data-target="#editModal" ><i class="fa fa-file-o"></i> 新建</button>
                                         <button type="button" class="btn btn-default" title="删除" ng-click="dele()" ><i class="fa fa-trash-o"></i> 删除</button>
-                                        
+                                        <button type="button" class="btn btn-default" title="过审" ng-click="updatestatus('1')" ><i class="fa fa-trash-o"></i> 过审</button>
+                                        <button type="button" class="btn btn-default" title="驳回" ng-click="updatestatus('2')" ><i class="fa fa-trash-o"></i> 驳回</button>
+
                                         <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i class="fa fa-refresh"></i> 刷新</button>
                                     </div>
                                 </div>
                             </div>
                             <div class="box-tools pull-right">
-                                <div class="has-feedback">
+
+								<div class="has-feedback">
+
+								</div>
+								<div class="has-feedback">
+									规格状态：
+									<select ng-model="searchEntity.status" ng-change="reloadList()">
+										<option value="">全部</option>
+										<option value="0">未审核</option>
+										<option value="1">审核通过</option>
+										<option value="2">驳回</option>
+									</select>
 							                    规格名称：<input ng-model="searchEntity.specName" >
 									<button class="btn btn-default" ng-click="reloadList()" >查询</button>
                                 </div>
+
                             </div>
                             <!--工具栏/-->
 			                  <!--数据列表-->

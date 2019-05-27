@@ -37,6 +37,8 @@ public class SpecificationController {
         return pageResult;
     }
 
+
+
     /**
      * 规格添加
      * @param specEntity
@@ -104,5 +106,17 @@ public class SpecificationController {
     public List<Map> selectOptionList() {
         List<Map> maps = specificationService.selectOptionList();
         return maps;
+    }
+
+    @RequestMapping("/updatestatus")
+    public Result updatestatus(String status, long[] ids){
+        try {
+            specificationService.updatestatus(status,ids);
+            return new Result(true,"修改成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            return new Result(true,"修改成功");
+        }
+
     }
 }
