@@ -24,4 +24,7 @@ public interface OrderService {
      * @param transaction_id    交易号, 微信给我们返回的
      */
     public void updateOrderStatus(String out_trade_no,String transaction_id);
+
+
+    List<Order> findAllByName(String name);
 }

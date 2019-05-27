@@ -1,5 +1,7 @@
 package cn.itcast.core.pojo.order;
 
+import cn.itcast.core.pojo.item.Item;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -40,6 +42,20 @@ public class OrderItem implements Serializable {
      * 商品总金额
      */
     private BigDecimal totalFee;
+
+    private Item item;
+
+    public Item getItem() {
+        return item;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
 
     /**
      * 商品图片地址
