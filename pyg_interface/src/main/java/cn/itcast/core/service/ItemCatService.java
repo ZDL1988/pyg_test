@@ -1,5 +1,6 @@
 package cn.itcast.core.service;
 
+import cn.itcast.core.pojo.entity.ItemCatEntity;
 import cn.itcast.core.pojo.item.ItemCat;
 
 import java.util.List;
@@ -11,4 +12,8 @@ public interface ItemCatService {
     public ItemCat findOne(Long id);
 
     public List<ItemCat> findAll();
+
+    void add(ItemCatEntity itemCatEntity);
+
+    List<ItemCatEntity> findItemCatestatus(String status);
 }
