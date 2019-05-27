@@ -213,4 +213,10 @@
       custom_attribute_items = #{customAttributeItems,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <select id="selectNames"  resultType="String" >
+    select
+    name
+    from tb_type_template
+  </select>
+
 </mapper>
