@@ -37,6 +37,11 @@ public class SpecificationServiceImpl implements SpecificationService {
         if (spec != null) {
             if (spec.getSpecName() != null && !"".equals(spec.getSpecName())) {
                 criteria.andSpecNameLike("%"+spec.getSpecName()+"%");
+        }
+
+            //状态查询
+            if (spec.getStatus() !=null && !"".equals(spec.getStatus())){
+                criteria.andStatusEqualTo(spec.getStatus());
             }
         }
 
@@ -123,5 +128,20 @@ public class SpecificationServiceImpl implements SpecificationService {
     @Override
     public List<Map> selectOptionList() {
         return specDao.selectOptionList();
+    }
+
+    @Override
+    public void updatestatus(String status, long[] ids) {
+        //根据ID修改状态
+        if (ids !=null && ids.length >0){
+            for (long id : ids) {
+                Specification specification = new Specification();
+
+                specification.setId(id);
+                specification.setStatus(status);
+                //通过ID修改 pojo里有的值
+                specDao.updateByPrimaryKeySelective(specification);
+            }
+        }
     }
 }
