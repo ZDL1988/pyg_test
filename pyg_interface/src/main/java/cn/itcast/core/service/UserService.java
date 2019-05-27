@@ -43,4 +43,6 @@ public interface UserService {
 
 
     void update(String username);
+
+     User selectByUsername(String username);
 }

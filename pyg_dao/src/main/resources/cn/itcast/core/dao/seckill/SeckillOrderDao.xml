@@ -325,4 +325,30 @@
       transaction_id = #{transactionId,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="selectListSeckillOrder" resultMap="BaseResultMap" >
+    SELECT
+    tbi.title receiver_address,
+    tso.money,
+    tso.user_id,
+    tso.seller_id,
+    tso.create_time,
+    tso.pay_time,
+    tso.transaction_id
+FROM
+	tb_seckill_order tso,
+	tb_item tbi
+<where>
+   tso.seckill_id = tbi.id
+  <if test="null != itemName">
+
+
+AND tbi.title   LIKE concat(concat('%',#{itemName}),'%')
+
+  </if>
+</where>
+  </select>
+
+
+
 </mapper>
