@@ -50,6 +50,7 @@
     <!--依赖管理-->
     <dependencyManagement>
         <dependencies>
+
             <!-- Spring -->
             <dependency>
                 <groupId>org.springframework</groupId>

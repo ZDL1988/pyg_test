@@ -3,13 +3,16 @@ package cn.itcast.core.controller;
 import cn.itcast.core.pojo.entity.PageResult;
 import cn.itcast.core.pojo.entity.Result;
 import cn.itcast.core.pojo.good.Brand;
+import cn.itcast.core.pojo.good.Goods;
 import cn.itcast.core.service.BrandService;
+import cn.itcast.core.util.ExportExcelUtils;
 import com.alibaba.dubbo.config.annotation.Reference;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * 品牌管理
@@ -131,5 +134,28 @@ public class BrandController {
     public List<Map> selectOptionList() {
         List<Map> maps = brandService.selectOptionList();
         return maps;
+    }
+
+    @RequestMapping("/Epmb")
+    public void  ExportEpmb(HttpServletResponse response){
+
+
+            //生成的excel 的名字
+            String name  ="品牌模板"+ UUID.randomUUID().toString().replace("-","");
+            // 获取需要转出的excle表头的map字段
+            LinkedHashMap<String, String> fieldMap =new LinkedHashMap<String, String>() ;
+
+            fieldMap.put("name", "品牌名称");
+            fieldMap.put("firstChar", "品牌首字母");
+
+        ArrayList<Object> objects = new ArrayList<>();
+        ExportExcelUtils.export(name, objects, fieldMap, response);
+
+            try {
+                response.getWriter().write("ID为空或者错误");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
     }
 }

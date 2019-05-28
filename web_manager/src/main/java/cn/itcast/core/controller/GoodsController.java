@@ -7,14 +7,21 @@ import cn.itcast.core.pojo.good.Goods;
 import cn.itcast.core.service.GoodsService;
 import cn.itcast.core.service.PageService;
 import cn.itcast.core.service.SolrManagerService;
+import cn.itcast.core.util.ExportExcelUtils;
 import com.alibaba.dubbo.config.annotation.Reference;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.management.relation.RelationSupport;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * 商品管理
@@ -25,6 +32,8 @@ public class GoodsController {
 
     @Reference
     private GoodsService goodsService;
+
+
 
 //    @Reference
 //    private SolrManagerService solrManagerService;
@@ -43,6 +52,16 @@ public class GoodsController {
         goods.setSellerId(userName);
         //3. 进行分页查询
         PageResult pageResult = goodsService.search(goods, page, rows);
+        return pageResult;
+    }
+    @RequestMapping("/search2")
+    public PageResult search2(@RequestBody Goods goods, Integer page, Integer rows) {
+        //1. 获取当前登录用户的用户名
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+        //2. 向查询条件对象中添加当前登录用户的用户名作为查询条件
+        goods.setSellerId(userName);
+        //3. 进行分页查询
+        PageResult pageResult = goodsService.search2(goods, page, rows);
         return pageResult;
     }
 
@@ -98,21 +117,40 @@ public class GoodsController {
         }
     }
 
-    /**
-     * 测试生成静态化页面
-     * @param goodsId   商品id
-     * @return
-     */
-//    @RequestMapping("/page")
-//    public Result testCreateStaticPage(Long goodsId) {
-//        try {
-//            Map<String, Object> rootMap = pageService.findGoodsData(goodsId);
-//            pageService.createStaticPage(goodsId, rootMap);
-//            return new Result(true, "生成成功!");
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return new Result(false, "生成失败!");
-//        }
-//    }
 
+
+    @RequestMapping("/Epgood")
+    public void  ExportGood(long[] ids,HttpServletResponse response){
+        if (ids !=null&& ids.length >0 ){
+            //要导出的数据
+            List<Goods> goodsList = goodsService.ExportGood(ids);
+            //生成的excel 的名字
+            String name  ="商品数据"+ UUID.randomUUID().toString().replace("-","");
+            // 获取需要转出的excle表头的map字段
+            LinkedHashMap<String, String> fieldMap =new LinkedHashMap<String, String>() ;
+            fieldMap.put("id", "ID");
+            fieldMap.put("sellerId", "商家ID");
+            fieldMap.put("goodsName", "spu名");
+            fieldMap.put("defaultItemId", "默认sku");
+            fieldMap.put("auditStatus", "状态");
+            fieldMap.put("isMarketable", "是否上架");
+            fieldMap.put("brandId", "品牌ID");
+            fieldMap.put("caption", "副标题");
+            fieldMap.put("category1Id", "一级类目");
+            fieldMap.put("category2Id", "二级类目");
+            fieldMap.put("category3Id", "三级类目");
+            fieldMap.put("smallPic", "小图");
+            fieldMap.put("price", "商城价");
+            fieldMap.put("typeTemplateId", "分类模板ID");
+            fieldMap.put("isEnableSpec", "是否启用规格");
+            fieldMap.put("isDelete", "是否删除");
+            ExportExcelUtils.export(name, goodsList, fieldMap, response);
+        }else {
+            try {
+                response.getWriter().write("ID为空或者错误");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

@@ -11,7 +11,7 @@
     <link rel="stylesheet" type="text/css" href="css/webbase.css" />
     <link rel="stylesheet" type="text/css" href="css/pages-seckillOrder.css" />
     
-    <script type="text/javascript" src="plugins/angularjs/angular.min.js"></script>
+    <script type="text/javascript" src="https://cdn.staticfile.org/angular.js/1.4.6/angular.min.js"></script>
 	<script type="text/javascript" src="js/base.js"></script>
 	<script type="text/javascript" src="js/service/loginService.js"></script>
 	<script type="text/javascript" src="js/controller/indexController.js"></script>
@@ -227,7 +227,7 @@ $(function(){
                                     <!--order1-->
                                     <div class="choose-title" >
                                         <label data-toggle="checkbox" class="checkbox-pretty ">
-                                            <input type="checkbox" checked="checked"><span>2017-02-11 11:59　订单编号：{{order.orderId}}}   <a>和我联系</a></span>
+                                            <input type="checkbox" checked="checked"><span>{{order.createTime}}　订单编号：{{order.orderId}}   <a>和我联系</a></span>
                                         </label>
                                         <a class="sui-btn btn-info share-btn">分享</a>
                                     </div>
@@ -235,7 +235,7 @@ $(function(){
                                         <tbody >
                                         <tr ng-repeat="orderitem in order.orderItemList">
                                             <td width="35%">
-                                                <div class="typographic"><img src="img/goods.png" />
+                                                <div class="typographic"><img src="{{orderitem.picPath}}" width="50" height="50" />
                                                     <a href="#" class="block-text">{{orderitem.title}}</a>
                                                     <span class="guige">规格：{{findspe(orderitem.item.spec)}}</span>
                                                 </div>
@@ -251,33 +251,25 @@ $(function(){
                                             </td>
 
 
-											<input style="display:none" type="hidden"  ng-model="myVar" ng-init="myVar = true">
-
-											<div ng-if="myVar">
-												<input style="display:none" type="hidden"  ng-model="myVar" ng-init="myVar = false">
-												<td width="10%" class="center" rowspan="{{order.orderItemList.length}}">
+											<td width="10%" class="center" rowspan="1">
 													<ul class="unstyled">
 														<li>¥{{orderitem.totalFee}}</li>
 														<li>（含运费：￥0.00）</li>
 													</ul>
 												</td>
-												<td width="10%" class="center" rowspan="{{order.orderItemList.length}}">
+												<td width="10%" class="center" rowspan="1">
 													<ul class="unstyled">
-														<li>等待卖家付款</li>
+														<li>{{findstatus(order.status)}}</li>
 														<li><a href="orderDetail.html" class="btn">订单详情 </a></li>
 													</ul>
 												</td>
-												<td width="10%" class="center" rowspan="{{order.orderItemList.length}}">
+												<td width="10%" class="center" rowspan="1">
 													<ul class="unstyled">
 														<li><a href="#" class="sui-btn btn-info">立即付款</a></li>
 														<li>取消订单</li>
 
 													</ul>
-												</td>
-
-											</div>
-
-
+											</td>
 
 
                                         </tr>
@@ -285,7 +277,7 @@ $(function(){
 
                                         </tbody>
                                     </table>
-									<input style="display:none" type="hidden"  ng-model="myVar" ng-init="myVar = true">
+									 
                                 </div>
 
 

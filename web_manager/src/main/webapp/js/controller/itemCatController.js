@@ -1,5 +1,5 @@
  //控制层 
-app.controller('itemCatController' ,function($scope,$controller   ,itemCatService){	
+app.controller('itemCatController' ,function($scope,$controller ,$location  ,itemCatService){
 	
 	$controller('baseController',{$scope:$scope});//继承
 	
@@ -107,13 +107,24 @@ app.controller('itemCatController' ,function($scope,$controller   ,itemCatServic
 		
 		$scope.findByParentId(p_entity.id);
 	}
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+    $scope.EP=function () {
+
+        $scope.reloadList();
+        //获取协议
+        var http = $location.protocol()
+        //获取主机地址
+        var host = $location.host();
+        //获取端口号
+        var port = $location.port();
+        window.open(http+"://"+host+":"+port+"/itemCat/Epmb.do");
+
+    }
 	
 	
 	

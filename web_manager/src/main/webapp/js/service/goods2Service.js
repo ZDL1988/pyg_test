@@ -1,5 +1,5 @@
 //服务层
-app.service('goodsService',function($http){
+app.service('goods2Service',function($http){
 	    	
 	//读取列表数据绑定到表单中
 	this.findAll=function(){
@@ -27,13 +27,13 @@ app.service('goodsService',function($http){
 	}
 	//搜索
 	this.search=function(page,rows,searchEntity){
-		return $http.post('../goods/search.do?page='+page+"&rows="+rows, searchEntity);
+		return $http.post('../goods/search2.do?page='+page+"&rows="+rows, searchEntity);
 	}    
 	
 	this.updateStatus = function(ids,status){
 		return $http.get('../goods/updateStatus.do?ids='+ids+"&status="+status);
 	}
 	this.EP=function (ids) {
-        return $http.get('../goods/Epgood.do?ids='+ids);
+         return $http.get('../goods/Epgood.do?ids='+ids);
     }
 });

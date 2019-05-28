@@ -18,5 +18,13 @@ app.controller('homeIndexController',function($scope,homeIndexService){
 	  return d;
 	}
 
+	$scope.findstatus=function(status){
+		if (status=='1'){
+			return "未支付";
+
+		}else if (status=='2'){
+			return "已支付";
+		}
+	}
 
 });

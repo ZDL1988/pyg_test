@@ -1,6 +1,8 @@
 package cn.itcast.core.service;
 
 import cn.itcast.core.pojo.entity.BuyerCart;
+import cn.itcast.core.pojo.entity.PageResult;
+import cn.itcast.core.pojo.good.Goods;
 import cn.itcast.core.pojo.log.PayLog;
 import cn.itcast.core.pojo.order.Order;
 
@@ -27,4 +29,9 @@ public interface OrderService {
 
 
     List<Order> findAllByName(String name);
+
+    PageResult search(Order order,int page,int rows);
+
+    List<Order> ExportGood(long[] ids);
+
 }

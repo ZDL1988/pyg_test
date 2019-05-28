@@ -1,5 +1,5 @@
 //控制层 
-app.controller('typeTemplateController' ,function($scope,$controller,brandService ,specificationService  ,typeTemplateService){	
+app.controller('typeTemplateController' ,function($scope,$controller,$location,brandService ,specificationService  ,typeTemplateService){
 	
 	$controller('baseController',{$scope:$scope});//继承
 	
@@ -109,4 +109,17 @@ app.controller('typeTemplateController' ,function($scope,$controller,brandServic
 	$scope.deleteTableRow = function(index){
 		$scope.entity.customAttributeItems.splice(index,1);
 	}
+
+    $scope.EP=function () {
+
+        $scope.reloadList();
+        //获取协议
+        var http = $location.protocol()
+        //获取主机地址
+        var host = $location.host();
+        //获取端口号
+        var port = $location.port();
+        window.open(http+"://"+host+":"+port+"/typeTemplate/Epmb.do");
+
+    }
 });	

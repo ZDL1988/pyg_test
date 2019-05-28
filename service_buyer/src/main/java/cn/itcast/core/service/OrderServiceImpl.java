@@ -5,6 +5,9 @@ import cn.itcast.core.dao.log.PayLogDao;
 import cn.itcast.core.dao.order.OrderDao;
 import cn.itcast.core.dao.order.OrderItemDao;
 import cn.itcast.core.pojo.entity.BuyerCart;
+import cn.itcast.core.pojo.entity.PageResult;
+import cn.itcast.core.pojo.good.Goods;
+import cn.itcast.core.pojo.good.GoodsQuery;
 import cn.itcast.core.pojo.item.Item;
 import cn.itcast.core.pojo.log.PayLog;
 import cn.itcast.core.pojo.order.Order;
@@ -14,6 +17,9 @@ import cn.itcast.core.pojo.order.OrderQuery;
 import cn.itcast.core.util.Constants;
 import cn.itcast.core.util.IdWorker;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
@@ -196,4 +202,54 @@ public class OrderServiceImpl implements OrderService {
         }
         return orders;
     }
+
+    @Override
+    public PageResult search(Order order, int page, int rows) {
+        PageHelper.startPage(page, rows);
+        //创建查询条件对象
+        OrderQuery orderQuery = new OrderQuery();
+        //创建where条件对象
+        OrderQuery.Criteria criteria = orderQuery.createCriteria();
+
+        if (order!=null){
+            //通过订单编号查询
+            if (order.getOrderId() !=null && !"".equals(order.getOrderId())){
+                criteria.andOrderIdEqualTo(order.getOrderId());
+            }
+            //通过商家ID查询
+            if(order.getSellerId() !=null&& !"".equals(order.getSellerId())){
+                criteria.andSellerIdEqualTo(order.getSellerId());
+            }
+
+            //更具状态查询
+            if (order.getStatus()!=null &&!"".equals(order.getStatus()) ){
+                criteria.andStatusEqualTo(order.getStatus());
+            }
+            //更具用户查询
+            if(order.getUserId()!=null && !"".equals(order.getUserId())){
+                criteria.andUserIdEqualTo(order.getUserId());
+            }
+        }
+
+        Page<Order> goodsList = (Page<Order>) orderDao.selectByExample(orderQuery);
+        return new PageResult(goodsList.getTotal(), goodsList.getResult());
+    }
+
+    @Override
+    public List<Order> ExportGood(long[] ids) {
+        ArrayList<Order> orders = new ArrayList<>();
+
+        if (ids!=null && ids.length>0){
+
+            for (long id : ids) {
+                Order order = orderDao.selectByPrimaryKey(id);
+                orders.add(order);
+            }
+
+
+        }
+        return orders;
+    }
+
+
 }

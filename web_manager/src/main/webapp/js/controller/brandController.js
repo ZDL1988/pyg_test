@@ -1,5 +1,5 @@
 // 定义控制器:
-app.controller("brandController",function($scope,$controller,$http,brandService){
+app.controller("brandController",function($scope,$location,$controller,$http,brandService){
 	// AngularJS中的继承:伪继承
 	$controller('baseController',{$scope:$scope});
 	
@@ -79,5 +79,32 @@ app.controller("brandController",function($scope,$controller,$http,brandService)
 			$scope.list = response.rows;
 		});
 	}
-	
+
+    $scope.EP=function () {
+
+        $scope.reloadList();
+        //获取协议
+        var http = $location.protocol()
+        //获取主机地址
+        var host = $location.host();
+        //获取端口号
+        var port = $location.port();
+        window.open(http+"://"+host+":"+port+"/brand/Epmb.do");
+
+    }
+
+    $scope.uploadFile = function () {
+        var url = "localhost:8084/brand/importListExcel.do";
+        var formData = new FormData();//使用FormData进行文件上传
+        formData.append("file", file.files[0]);//拿到当前文件
+        $http.post(url, formData, {
+            transformRequest: angular.identity,
+            headers: {'Content-Type': undefined}
+        }).success(function (data, status) {
+
+        }).error(function (data, status) {
+
+        });
+    };
+
 });

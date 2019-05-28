@@ -5,13 +5,15 @@ import cn.itcast.core.pojo.entity.Result;
 import cn.itcast.core.pojo.entity.SpecEntity;
 import cn.itcast.core.pojo.specification.Specification;
 import cn.itcast.core.service.SpecificationService;
+import cn.itcast.core.util.ExportExcelUtils;
 import com.alibaba.dubbo.config.annotation.Reference;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * 规格管理
@@ -116,6 +118,30 @@ public class SpecificationController {
         }catch (Exception e){
             e.printStackTrace();
             return new Result(true,"修改成功");
+        }
+
+    }
+
+    @RequestMapping("/Epmb")
+    public void  Epmb(HttpServletResponse response){
+
+
+        //生成的excel 的名字
+        String name  ="规格模板"+ UUID.randomUUID().toString().replace("-","");
+        // 获取需要转出的excle表头的map字段
+        LinkedHashMap<String, String> fieldMap =new LinkedHashMap<String, String>() ;
+
+        fieldMap.put("specName", "规格名称");
+        fieldMap.put("specoptionlist", "规格选项");
+        fieldMap.put("specoptionlist", "规格选项格式：{[规格选项名称,排序],[规格选项名称,排序]}");
+
+        ArrayList<Object> objects = new ArrayList<>();
+        ExportExcelUtils.export(name, objects, fieldMap, response);
+
+        try {
+            response.getWriter().write("ID为空或者错误");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
     }

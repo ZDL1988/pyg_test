@@ -32,10 +32,7 @@ import javax.jms.Message;
 import javax.jms.Session;
 import javax.jms.TextMessage;
 import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @Transactional
@@ -222,6 +219,43 @@ public class GoodsServiceImpl implements GoodsService {
                 }
             }
         }
+
+    }
+
+    @Override
+    public List<Goods> ExportGood(long[] ids) {
+        ArrayList<Goods> goods = new ArrayList<>();
+        for (long id : ids) {
+            Goods goods1 = goodsDao.selectByPrimaryKey(id);
+            goods.add(goods1);
+        }
+
+        return goods;
+    }
+
+    @Override
+    public PageResult search2(Goods goods, Integer page, Integer rows) {
+        PageHelper.startPage(page, rows);
+        //创建查询条件对象
+        GoodsQuery query = new GoodsQuery();
+        //创建where条件对象
+        GoodsQuery.Criteria criteria = query.createCriteria();
+        if (goods != null) {
+            //根据商品名称模糊查询
+            if (goods.getGoodsName() != null && !"".equals(goods.getGoodsName())) {
+                criteria.andGoodsNameLike("%" + goods.getGoodsName() + "%");
+            }
+
+            //根据账户名称精确查询自己添加的商品, 如果是管理员账户则查询所有商品
+            if (goods.getSellerId() != null && !"".equals(goods.getSellerId())
+                    && !"admin".equals(goods.getSellerId()) && !"wc".equals(goods.getSellerId())) {
+                criteria.andSellerIdEqualTo(goods.getSellerId());
+            }
+
+        }
+
+        Page<Goods> goodsList = (Page<Goods>) goodsDao.selectByExample(query);
+        return new PageResult(goodsList.getTotal(), goodsList.getResult());
 
     }
 

@@ -10,9 +10,13 @@
 
     <link rel="stylesheet" type="text/css" href="css/webbase.css" />
     <link rel="stylesheet" type="text/css" href="css/pages-seckillOrder.css" />
+	<script type="text/javascript" src="https://cdn.staticfile.org/angular.js/1.4.6/angular.min.js"></script>
+	<script type="text/javascript" src="js/base.js"></script>
+	<script type="text/javascript" src="js/controller/HomeaddressController.js"></script>
+	<script type="text/javascript" src="js/service/HomeaddressService.js"></script>
 </head>
 
-<body>
+<body  ng-app="pinyougou" ng-controller="HomeaddressController" ng-init="findAll()">
     <!-- 头部栏位 -->
     <!--页面顶部-->
 <div id="nav-bottom">
@@ -191,7 +195,7 @@ $(function(){
                     <div class="body userAddress">
                         <div class="address-title">
                             <span class="title">地址管理</span>
-                            <a data-toggle="modal" data-target=".edit" data-keyboard="false"   class="sui-btn  btn-info add-new">添加新地址</a>
+                            <a data-toggle="modal" data-target=".edit" data-keyboard="false"   class="sui-btn  btn-info add-new" ng-click="findprovinces()">添加新地址</a>
                             <span class="clearfix"></span>
                         </div>
                         <div class="address-detail">
@@ -205,26 +209,18 @@ $(function(){
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>刘田田</td>
-                                        <td>北京 北京市 海淀区 上地街道东北旺西路8号中关村软件园9号楼</td>
-                                        <td>1774***********4</td>
+                                    <tr ng-repeat="address in list">
+                                        <td>{{address.userId}}</td>
+                                        <td>{{address.provinceId+ adress.cityId+  adress.townId+address.address}}</td>
+                                        <td>{{address.mobile}}</td>
                                         <td>
-                                            <a href="#">编辑</a>
-                                            <a href="#">删除</a>
-                                            默认地址
+
+											<a href="#" data-toggle="modal" data-target=".edit" ng-click="updateedit(address.id);findprovinces()" ng-click="aid=address.id">编辑</a>
+                                            <a href="#" ng-click="del(address.id)">删除</a>
+											<a href="#" ng-click="updatestatus(address.id)">{{status(address.isDefault)}}</a>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>沈沉</td>
-                                        <td>北京 北京市 海淀区 上地街道东北旺西路8号中关村软件园9号楼</td>
-                                        <td>1774***********4</td>
-                                        <td>
-                                            <a href="#">编辑</a>
-                                            <a href="#">删除</a>
-                                            <a href="#">设为默认</a>
-                                        </td>
-                                    </tr>
+
                                     
                                 </tbody>
                             </table>                          
@@ -235,14 +231,14 @@ $(function(){
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <button type="button" data-dismiss="modal" aria-hidden="true" class="sui-close">×</button>
-                                        <h4 id="myModalLabel" class="modal-title">新增地址</h4>
+                                        <h4 id="myModalLabel" class="modal-title">編輯</h4>
                                     </div>
                                     <div class="modal-body">
                                         <form action="" class="sui-form form-horizontal">
                                             <div class="control-group">
                                             <label class="control-label">收货人：</label>
                                             <div class="controls">
-                                                <input type="text" class="input-medium">
+                                                <input type="text" ng-model="pojo.contact" class="input-medium">
                                             </div>
                                         </div>
                                         <div class="control-group">
@@ -250,13 +246,19 @@ $(function(){
                                             <div class="controls">
                                                 <div data-toggle="distpicker">
                                                 <div class="form-group area">
-                                                    <select class="form-control" id="province1"></select>
+                                                    <select class="form-control" id="province1" ng-model="pojo.provinceId" ng-change="findcity()">
+														<option ng-repeat="p in provinceslist" ng-selected="p.provinceid==pojo.provinceId" value="{{p.provinceid}}">{{p.province}}</option>
+													</select>
                                                 </div>
                                                 <div class="form-group area">
-                                                    <select class="form-control" id="city1"></select>
+                                                    <select class="form-control" id="city1" ng-model="pojo.cityId" ng-change="findarea()">
+														<option ng-repeat="c in citylist" ng-selected="c.cityid==pojo.cityId" value="{{c.cityid}}">{{c.city}}</option>
+													</select>
                                                 </div>
                                                 <div class="form-group area">
-                                                    <select class="form-control" id="district1"></select>
+                                                    <select class="form-control" id="district1" ng-model="pojo.townId">
+														<option ng-repeat="a in arealist" ng-selected="a.id==pojo.townId" value="{{a.id}}">{{a.area}}</option>
+													</select>
                                                 </div>
                                             </div>
                                             </div>									 
@@ -264,28 +266,23 @@ $(function(){
                                         <div class="control-group">
                                             <label class="control-label">详细地址：</label>
                                             <div class="controls">
-                                                <input type="text" class="input-large">
+                                                <input type="text" ng-model="pojo.address" class="input-large">
                                             </div>
                                         </div>
                                         <div class="control-group">
                                             <label class="control-label">联系电话：</label>
                                             <div class="controls">
-                                                <input type="text" class="input-medium">
+                                                <input type="text" ng-model="pojo.mobile" class="input-medium">
                                             </div>
                                         </div>
-                                        <div class="control-group">
-                                            <label class="control-label">邮箱：</label>
-                                            <div class="controls">
-                                                <input type="text" class="input-medium">
-                                            </div>
-                                        </div>
+
                                         <div class="control-group">
                                             <label class="control-label">地址别名：</label>
                                             <div class="controls">
-                                                <input type="text" class="input-medium">
+                                                <input type="text" ng-model="pojo.alias" class="input-medium">
                                             </div>
                                             <div class="othername">
-                                                建议填写常用地址：<a href="#" class="sui-btn btn-default">家里</a>　<a href="#" class="sui-btn btn-default">父母家</a>　<a href="#" class="sui-btn btn-default">公司</a>
+                                                建议填写常用地址：<a href="#" ng-click="pojo.alias='家里'" class="sui-btn btn-default">家里</a>　<a href="#"  ng-click="pojo.alias='父母家'"  class="sui-btn btn-default">父母家</a>　<a href="#"  ng-click="pojo.alias='公司'"  class="sui-btn btn-default">公司</a>
                                             </div>
                                         </div>
                                         
@@ -294,7 +291,7 @@ $(function(){
                                         
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" data-ok="modal" class="sui-btn btn-primary btn-large">确定</button>
+                                        <button type="button" data-ok="modal" ng-click="add(aid)" class="sui-btn btn-primary btn-large">确定</button>
                                         <button type="button" data-dismiss="modal" class="sui-btn btn-default btn-large">取消</button>
                                     </div>
                                 </div>
